@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
 using System.Text.Json;
 using YourOwnData;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 namespace YourOwnData.Pages
 {
@@ -62,7 +65,7 @@ namespace YourOwnData.Pages
             If the resulting query is non-executable, replace ""your-query"" with NA, but still substitute ""your-query"" with a summary of the query.
             Do not use MySQL syntax."; 
 
-            // Set up the AI chat query/completion
+               // Set up the AI chat query/completion
             ChatCompletionsOptions chatCompletionsOptions = new ChatCompletionsOptions()
             {
                 Messages = {
@@ -71,6 +74,7 @@ namespace YourOwnData.Pages
                 },
                 DeploymentName = openAIDeploymentName
             };
+
 
             // Send request to Azure OpenAI model
             try

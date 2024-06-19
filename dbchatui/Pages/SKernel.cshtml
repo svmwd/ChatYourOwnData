@@ -1,0 +1,35 @@
+﻿@page
+@model YourOwnData.Pages.SKernelModel
+@{
+}
+<style>
+    .panel-heading {
+        padding: 0px;
+        //if not working use !important rule
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="mt-4">Chat with Semantic Kernel</h2>
+        <hr />
+        <br />
+    </div>
+    <div class="col-md-12">
+        <form asp-page="SKernel" class="form">
+            <div class="form-group mb-3">
+                <h4 for="name">Your Prompt</h4>
+                <textarea type="text" asp-for="@Model.UserPrompt" class="form-control"></textarea>
+            </div>
+            <input type="submit" class="btn btn-success" />
+        </form>
+        <hr />
+        @if (!string.IsNullOrEmpty(Model.Response))
+        {
+            <p><b>AI generated reponse:</b> @Model.Response</p>
+        }
+        @if (!string.IsNullOrEmpty(Model.Error))
+        {
+            <p><b>Error:</b> @Model.Error</p>
+        }
+    </div>
+</div>
