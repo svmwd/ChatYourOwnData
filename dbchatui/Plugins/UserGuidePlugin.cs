@@ -1,40 +1,41 @@
 ﻿using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel;
 using System.ComponentModel;
+using Azure.AI.OpenAI;
 
 namespace YourOwnData.Plugins
 {
+
     public class UserGuidePlugin
     {
+        private string DataSourceEndpoint = "https://mecwise-azure-openai-search-basic.search.windows.net";
+        private string DataSourceApiKey = "aG3dbtK1busxxJfF7IMu5oiJIAvCvsUk4bhRY6DfJDAzSeDSb4Wg";
+        private string DataSourceIndex = "mecwise-azure-openai-chatbot-search-basic-index02";
+
         [KernelFunction]
-        [Description("Provide information to a recipient based on datasource")]
-        public async Task<string> GetPrice(string itemName)
+        [Description("Provide information about mecwise application to a recipient based on userguides uploaded in this datasource")]
+        public async Task<string> GetStringAsync(
+        Kernel kernel,
+        [Description("User Prompt")] string UserPrompt)
         {
-            if (itemName == null)
-            {
-                return "0";
-            }
-            else
-            {
 #pragma warning disable SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
-                Kernel kernel = Kernel.CreateBuilder()
-                        .AddAzureOpenAIChatCompletion(new AzureOpenAIChatCompletionWithDataConfig
-                        {
-                            CompletionModelId = "gpt-35-turbo-1106",
-                            CompletionEndpoint = "https://mwd-azure-openai-westus.openai.azure.com/",
-                            CompletionApiKey = "3e0982201b4f44819ab2003f3d179d32",
-                            DataSourceEndpoint = "https://mecwise-azure-openai-chatbot-search-basic.search.windows.net",
-                            DataSourceApiKey = "jgvyZQ2Uvef0lZLisLU5Upe3yMWmunH3wU7aTrLGLPAzSeBwxI1i",
-                            DataSourceIndex = "mecwise-azure-openai-chatbot-search-basic-index01"
-                        })
-                        .Build();
+            var azureSearchExtensionConfiguration = new AzureSearchChatExtensionConfiguration
+            {
+                SearchEndpoint = new Uri(DataSourceEndpoint),
+                Authentication = new OnYourDataApiKeyAuthenticationOptions(DataSourceApiKey),
+                IndexName = Environment.GetEnvironmentVariable(DataSourceIndex)
+            };
+
+            var chatExtensionsOptions = new AzureChatExtensionsOptions { Extensions = { azureSearchExtensionConfiguration } };
+            var executionSettings = new OpenAIPromptExecutionSettings { AzureChatExtensionsOptions = chatExtensionsOptions };
+
+            var result = await kernel.InvokePromptAsync(UserPrompt, new(executionSettings));
+
 #pragma warning restore SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
-                var result = await kernel.InvokePromptAsync("how much is " + itemName);
-
-                return result.ToString();
-            }
+            return result.ToString();
         }
+
     }
 }

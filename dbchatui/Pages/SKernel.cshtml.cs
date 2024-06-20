@@ -31,6 +31,21 @@ namespace YourOwnData.Pages
             RunQuery(UserPrompt);
         }
 
+        public void OnPostAttachFileAsync()
+        {
+            var uploadedFile = Request.Form.Files["fileInput"];
+            if (uploadedFile != null && uploadedFile.Length > 0)
+            {
+                // Process the uploaded file (e.g., save it, read its content, etc.)
+                // Example: Save the file to disk
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", uploadedFile.FileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    uploadedFile.CopyTo(stream);
+                }
+            }
+        }
+
         public void RunQuery(string userPrompt)
         {
             // Create chat history
@@ -38,8 +53,12 @@ namespace YourOwnData.Pages
 
             // Get chat completion service
             var builder = Kernel.CreateBuilder()
-       .AddAzureOpenAIChatCompletion(modelId, endpoint, apiKey);
+            .AddAzureOpenAIChatCompletion(modelId, endpoint, apiKey);
             builder.Plugins.AddFromType<MenuPlugin>();
+            builder.Plugins.AddFromType<UserGuidePlugin>();
+            builder.Plugins.AddFromType<PrintPlugin>();
+            builder.Plugins.AddFromType<EmailPlugin>();
+            builder.Plugins.AddFromType<WebLaunchPlugin>();
             kernel = builder.Build();
 
             var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
@@ -65,45 +84,6 @@ namespace YourOwnData.Pages
             Response = result.Result.Content ?? string.Empty;
         }
 
-
-        public async void OnConsole()
-        {
-            // Create chat history
-            var history = new ChatHistory();
-
-            // Get chat completion service
-            var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
-
-            // Start the conversation
-            Console.Write("User > ");
-            string? userInput;
-            while ((userInput = Console.ReadLine()) != null)
-            {
-                // Add user input
-                history.AddUserMessage(userInput);
-
-                // Enable auto function calling
-                OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
-                {
-                    ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions
-                };
-
-                // Get the response from the AI
-                var result = await chatCompletionService.GetChatMessageContentAsync(
-                    history,
-                    executionSettings: openAIPromptExecutionSettings,
-                    kernel: kernel);
-
-                // Print the results
-                Console.WriteLine("Assistant > " + result);
-
-                // Add the message from the agent to the chat history
-                history.AddMessage(result.Role, result.Content ?? string.Empty);
-
-                // Get user input again
-                Console.Write("User > ");
-            }
-        }
 
     }
 

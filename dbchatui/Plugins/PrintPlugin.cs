@@ -1,5 +1,6 @@
 ﻿using Microsoft.SemanticKernel;
 using System.ComponentModel;
+using YourOwnData.Services;
 
 namespace YourOwnData.Plugins
 {
@@ -9,14 +10,14 @@ namespace YourOwnData.Plugins
         [Description("To print document to a printer.")]
         public string DoPrinting(
         Kernel kernel,
-        [Description("Print the document to the printer with printername")] string subject,
-        string printername
-    )
+        [Description("Print a sentence to network printer")] string sentence)
         {
             // Add logic to send an email using the recipientEmails, subject, and body
-            // For now, we'll just print out a success message to the console
-            return "Printed " + subject + "to " + printername + " successfully!";
+            PrintService service = new PrintService();
+            service.PrintToIPAddress("10.155.203.122", sentence);
+            return "Printed successfully!";
             //Console.WriteLine("Printed " + subject + " successfully!");
         }
+
     }
 }

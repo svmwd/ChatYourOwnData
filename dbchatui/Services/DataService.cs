@@ -2,7 +2,7 @@
 using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace YourOwnData
+namespace YourOwnData.Services
 {
     public static class DataService
     {
