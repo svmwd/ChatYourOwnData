@@ -16,7 +16,6 @@ namespace YourOwnData.Plugins
             EmailService service = new EmailService();
             var success = service.SendEmailAsync(emailAddress, emailBody);
             return success;
-            //Console.WriteLine("Printed " + subject + " successfully!");
         }
     }
 }
