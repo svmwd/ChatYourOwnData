@@ -13,12 +13,14 @@ namespace YourOwnData.Pages
 {
     public class IndexModel : PageModel
     {
-        public string Username { get; set; } 
+        public string Username { get; set; }
+        public string EmailAddress { get; set; }
 
         public void OnGet()
         {
             // Initialize properties or perform other logic
             Username = "Betsy Teng";
+            EmailAddress = "betsyteng@starvisionit.com";
         }
     }
 

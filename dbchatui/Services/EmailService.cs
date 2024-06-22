@@ -12,11 +12,11 @@ namespace YourOwnData.Services
             bool success = true;
             try
             {
-                using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"))
+                using (SmtpClient smtpClient = new SmtpClient("smtp.mecwise.com"))
                 {
-                    smtpClient.Port = 587;
-                    smtpClient.Credentials = new NetworkCredential("mwdwebuat@gmail.com", "MWD#1uat");
-                    smtpClient.EnableSsl = true;
+                    smtpClient.Port = 25;
+                    smtpClient.Credentials = new NetworkCredential("mwpdemo@mecwise.com", "St@rvisi0n123");
+                    smtpClient.EnableSsl = false;
 
                     using (MailMessage mailMessage = new MailMessage())
                     {

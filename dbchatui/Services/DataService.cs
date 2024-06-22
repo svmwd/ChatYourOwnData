@@ -6,9 +6,8 @@ namespace YourOwnData.Services
 {
     public static class DataService
     {
-        //const string SQL_CONNECTION_STRING = "Server=SVSG-MWD-F1\\SQL2022;Initial Catalog=MecWiseTest;Persist Security Info=False;User ID=sa;Password=p@ssw0rd;TrustServerCertificate=True;Connection Timeout=300;";
-        //const string SQL_CONNECTION_STRING = "Server=SVSG-MWD-F1\\SQL2016;Initial Catalog=MecWiseMWDV67_Hawker;Persist Security Info=False;User ID=sa;Password=p@ssw0rd;TrustServerCertificate=True;Connection Timeout=300;";
         const string SQL_CONNECTION_STRING = "Server=MWP-105\\SQL2016;Initial Catalog=MecWiseMWDV67_Hawker;Persist Security Info=False;User ID=sa;Password=p@ssw0rd;TrustServerCertificate=True;Connection Timeout=300;";
+        //const string SQL_CONNECTION_STRING = "Server=SVSG-MWD-F1\\SQL2016;Initial Catalog=MecWiseMWDV67_Hawker;Persist Security Info=False;User ID=sa;Password=p@ssw0rd;TrustServerCertificate=True;Connection Timeout=300;";
 
         public static List<List<string>> GetDataTable(string sqlQuery)
         {

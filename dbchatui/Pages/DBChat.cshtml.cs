@@ -51,7 +51,10 @@ namespace YourOwnData.Pages
             - dbo.SV_MF_SMAN (COMP_CODE, SMAN_CODE, SMAN_NAME, LOGIN_ID)
             - dbo.SV_SC_USER (USER_ID, GRP_ID)
             - dbo.SV_SC_MDULE_MATRIX (GRP_ID, GRP_DESC, MENU_SUB_ITEM_NAME_0, MENU_SUB_ITEM_DTL_NAME_0)
-            
+
+            else if the question is about sales, then use this database schema:
+            - dbo.SV_AR_INV_OPENAI_TESTING ( [COMPANY NAME],  [CUSTOMER NAME], [PART GROUP NAME], [PART NAME], QTY, [UNIT PRICE], [TOTAL AMOUNT], [CREATE DATE])
+
             Include column name headers in the query results.
 
             Always provide your answer in the JSON format below:
@@ -61,7 +64,6 @@ namespace YourOwnData.Pages
             Output ONLY JSON.
             In the preceding JSON response, substitute ""your-query"" with Microsoft SQL Server Query to retrieve the requested data.
             In the preceding JSON response, substitute ""your-summary"" with a summary of the query.
-            Always include all columns in the table.
             If the resulting query is non-executable, replace ""your-query"" with NA, but still substitute ""your-query"" with a summary of the query.
             Do not use MySQL syntax.";
 

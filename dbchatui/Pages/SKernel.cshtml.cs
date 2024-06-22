@@ -15,16 +15,12 @@ namespace YourOwnData.Pages
     {
         [BindProperty]
         public string UserPrompt { get; set; } = string.Empty;
-        public string Response { get; set; }
-        public string Error { get; set; }
+        public string? Response { get; set; }
+        public string? Error { get; set; }
 
-
-        private string modelId = "mwd-azure-openai-gpt-4o";
-        private string endpoint = "https://mwd-azure-openai-westus.openai.azure.com/";
-        private string apiKey = "3e0982201b4f44819ab2003f3d179d32";
-        private Kernel kernel;
-
-        public void OnGet() { }
+        public void OnGet() 
+        {
+        }
 
         public void OnPost()
         {
@@ -48,40 +44,16 @@ namespace YourOwnData.Pages
 
         public void RunQuery(string userPrompt)
         {
-            // Create chat history
-            var history = new ChatHistory();
-
-            // Get chat completion service
-            var builder = Kernel.CreateBuilder()
-            .AddAzureOpenAIChatCompletion(modelId, endpoint, apiKey);
-            builder.Plugins.AddFromType<MenuPlugin>();
-            builder.Plugins.AddFromType<UserGuidePlugin>();
-            builder.Plugins.AddFromType<PrintPlugin>();
-            builder.Plugins.AddFromType<EmailPlugin>();
-            builder.Plugins.AddFromType<WebLaunchPlugin>();
-            kernel = builder.Build();
-
-            var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
-
-            // Use the SchemaLoader project to export your db schema and then paste the schema in the placeholder below
-            var systemMessage = @"Your are a helpful, cheerful and friendly assistant";
-
-            history.AddUserMessage(userPrompt);
-
-            // Enable auto function calling
-            OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
-            {
-                ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
-                 ChatSystemPrompt = systemMessage
-            };
-
+            GlobalValues.history.AddUserMessage(userPrompt);
+            
             // Get the response from the AI
-            var result = chatCompletionService.GetChatMessageContentAsync(
-                history,
-                executionSettings: openAIPromptExecutionSettings,
-                kernel: kernel);
+            var result = GlobalValues.chatCompletionService.GetChatMessageContentAsync(
+                GlobalValues.history,
+                executionSettings: GlobalValues.openAIPromptExecutionSettings,
+                kernel: GlobalValues.kernel);
                  
             Response = result.Result.Content ?? string.Empty;
+            GlobalValues.history.AddAssistantMessage(Response);
         }
 
 
