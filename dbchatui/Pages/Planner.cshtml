@@ -1,0 +1,59 @@
+﻿@page
+@model YourOwnData.Pages.PlannerModel
+@{
+}
+<style>
+    .panel-heading {
+        padding: 0px;
+        //if not working use !important rule
+    }
+    /* Example styles for the input container */
+    .upload-container {
+        display: flex;
+        align-items: end;
+        gap: 10px;
+    }
+
+    /* Example styles for the input field */
+    #userQuery {
+        width: 300px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    /* Example styles for the button */
+    #fileButton {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="mt-4">Semantic Kernel with Planner</h2>
+        <hr />
+        <br />
+    </div>
+    <div class="col-md-12">
+        <form asp-page="Planner" class="form" method="post" enctype="multipart/form-data">
+            <div class="form-group mb-3">
+                <h4 for="name">Your Prompt</h4>
+                <textarea type="text" asp-for="@Model.UserPrompt" class="form-control"></textarea>
+            </div>
+            <input type="submit" class="btn btn-success" />
+        </form>
+        <hr />
+        @if (!string.IsNullOrEmpty(Model.Response))
+        {
+            <p><b>AI generated reponse:</b> @Model.Response</p>
+        }
+        @if (!string.IsNullOrEmpty(Model.Error))
+        {
+            <p><b>Error:</b> @Model.Error</p>
+        }
+    </div>
+</div>
