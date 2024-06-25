@@ -28,9 +28,9 @@ namespace YourOwnData.Pages
 
         public void RunQuery(string userPrompt)
         {
-            string serviceName = "mwd-azure-ai-search";
-            string apiKey = "H45RR4SK9U64ELTjtjYOZXmtos46jDRAPmwxJeMyRHAzSeCCUsPK";
-            string indexName = "azuresql-index01";
+            string serviceName = "mecwise-azure-openai-search-basic";
+            string apiKey = "aG3dbtK1busxxJfF7IMu5oiJIAvCvsUk4bhRY6DfJDAzSeDSb4Wg";
+            string indexName = "svstaging-hawker-mf-stk-ai-chat-index";
 
             // Create a SearchIndexClient to send create/delete index commands
             Uri serviceEndpoint = new Uri($"https://{serviceName}.search.windows.net/");
@@ -41,7 +41,7 @@ namespace YourOwnData.Pages
             SearchClient srchclient = new SearchClient(serviceEndpoint, indexName, credential);
 
             SearchOptions options;
-            SearchResults<Query> response;
+            SearchResults<MF_STK_PRICE> response;
 
             // Query 1
             Console.WriteLine("Query #1: Search on empty term '*' to return all documents, showing a subset of fields...\n");
@@ -53,11 +53,11 @@ namespace YourOwnData.Pages
                 OrderBy = { "" }
             };
 
-            options.Select.Add("COMP_CODE");
-            options.Select.Add("PART_NO");
-            options.Select.Add("PART_DESC");
+            options.Select.Add("StallName");
+            options.Select.Add("ItemName");
+            options.Select.Add("UnitPrice");
 
-            response = srchclient.Search<Query>("*", options);
+            response = srchclient.Search<MF_STK_PRICE>("*", options);
             var check = response.GetResults().AsQueryable();
 
             var rows = new List<List<string>>();
@@ -70,9 +70,9 @@ namespace YourOwnData.Pages
             var cols = new List<string>();      
             foreach ( var rec in check)
             {
-                cols.Add(rec.Document.PART_NO);
-                cols.Add(rec.Document.PART_DESC);
-                cols.Add(rec.Document.REVI_PRCE.ToString());
+                cols.Add(rec.Document.StallName);
+                cols.Add(rec.Document.ItemName);
+                cols.Add(rec.Document.UnitPrice);
             }
             
             rows.Add(cols);

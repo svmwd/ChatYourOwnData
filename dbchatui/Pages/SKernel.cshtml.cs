@@ -44,6 +44,7 @@ namespace YourOwnData.Pages
 
         public void RunQuery(string userPrompt)
         {
+            GlobalValues.UserMessage = userPrompt;
             GlobalValues.history.AddUserMessage(userPrompt);
             
             // Get the response from the AI

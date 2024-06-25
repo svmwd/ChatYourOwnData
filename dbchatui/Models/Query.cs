@@ -2,19 +2,22 @@
 
 namespace YourOwnData.Models
 {
-    public partial class Query
+    public partial class MF_STK_PRICE
     {
-        public string COMP_CODE { get; set; }
+        public string StallCode { get; set; }
+
+        public string StallName { get; set; }
+        public string MenuGroup { get; set; }
 
         [SimpleField(IsKey = true, IsFilterable = true)]
-        public string PART_NO { get; set; }
+        public string ItemCode { get; set; }
 
         [SearchableField(IsFilterable = true, IsFacetable = true)]
-        public string PART_GRP { get; set; }
+        public string ItemName { get; set; }
 
         [SearchableField(IsFilterable = true, IsSortable = true, IsFacetable = true)]
-        public string PART_DESC { get; set; }
-        public decimal? REVI_PRCE { get; set; }
+        public string UnitPrice { get; set; }
+        public string UOM { get; set; }
 
         /*
         [SimpleField(IsKey = true, IsFilterable = true)]

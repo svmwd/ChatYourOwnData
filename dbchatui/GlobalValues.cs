@@ -21,6 +21,7 @@ namespace YourOwnData
         private static Kernel? _kernel;
         private static ChatHistory? _history;
         private static string? _systemMessage;
+        private static string? _userMessage;
         private static IChatCompletionService? _chatCompletionService;
         private static OpenAIPromptExecutionSettings? _openAIPromptExecutionSettings;
 
@@ -79,8 +80,8 @@ namespace YourOwnData
                 {
                         var builder = Kernel.CreateBuilder()
                         .AddAzureOpenAIChatCompletion(AzureAIDeployment, AzureAIEndPoint, AzureAIAPIKey);
-                        builder.Plugins.AddFromType<MenuPlugin>();
-                        builder.Plugins.AddFromType<UserGuidePlugin>();
+                        builder.Plugins.AddFromType<HawkerPlugin>();
+                        //builder.Plugins.AddFromType<UserGuidePlugin>();
                         builder.Plugins.AddFromType<PrintPlugin>();
                         builder.Plugins.AddFromType<EmailPlugin>();
                         builder.Plugins.AddFromType<WebLaunchPlugin>();
@@ -130,7 +131,18 @@ namespace YourOwnData
             }
         }
 
-
+        public static string UserMessage
+        {
+            get
+            {
+                if (_userMessage == null)
+                {
+                    _userMessage = string.Empty;
+                }
+                return _userMessage;
+            }
+            set { _userMessage = value; }
+        }
 
     }
 
