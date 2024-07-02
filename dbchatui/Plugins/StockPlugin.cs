@@ -14,9 +14,9 @@ namespace YourOwnData.Plugins
 
     public class StockPlugin
     {
-        private string serviceName = "mecwise-azure-openai-search-basic";
-        private string apiKey = "aG3dbtK1busxxJfF7IMu5oiJIAvCvsUk4bhRY6DfJDAzSeDSb4Wg";
-        private string indexName = "svstaging-hawker-mf-stk-ai-chat-index";
+        private string serviceName = "";
+        private string apiKey = "";
+        private string indexName = "";
 
         [KernelFunction]
         [Description("Provide information about food menu and price from this list of hawker stalls: Muslim Delights, Tai Chi Fishball Noodle Stall, Boon Leng Fishball Noodles Stall, Teochew Duck Rice Hawker Stall, Yuan Pin Wanton Mee Hawker Stall, Yan Kee Chicken Rice Hawker Stall")]
