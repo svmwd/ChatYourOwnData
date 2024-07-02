@@ -14,9 +14,9 @@ namespace YourOwnData.Plugins
 
     public class HawkerPlugin
     {
-        private string serviceName = "mecwise-azure-openai-search-basic";
-        private string apiKey = "aG3dbtK1busxxJfF7IMu5oiJIAvCvsUk4bhRY6DfJDAzSeDSb4Wg";
-        private string indexName = "mwd-svstaging-hawker-sv-mf-stk-ai-chat-index";
+        private string serviceName = "";
+        private string apiKey = "";
+        private string indexName = "";
 
         [KernelFunction]
         [Description("Provide information about food menu and price from this list of hawker stalls: " +
