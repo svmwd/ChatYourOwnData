@@ -23,19 +23,10 @@ namespace YourOwnData.Pages
 
             public void RunQuery(string userPrompt)
             {
-                string openAIEndpoint = "https://mwd-azure-openai-westus.openai.azure.com/";
-                string openAIKey = "3e0982201b4f44819ab2003f3d179d32";
+            OpenAIClient client = GlobalValues.openAIClient;
 
-                // Configure OpenAI client GPT-4
-                string openAIDeploymentName = "mwd-azure-openai-gpt-4o";
-
-                // Configure OpenAI client GPT-35
-                //string openAIDeploymentName = "mwd-kernel-plugin";
-
-                OpenAIClient client = new(new Uri(openAIEndpoint), new AzureKeyCredential(openAIKey));
-
-                // Use the SchemaLoader project to export your db schema and then paste the schema in the placeholder below
-                var systemMessage = @"Your are a helpful, cheerful database assistant. 
+            // Use the SchemaLoader project to export your db schema and then paste the schema in the placeholder below
+            var systemMessage = @"Your are a helpful, cheerful database assistant. 
             Use the following database schema when creating your answers:
             - dbo.SQL_AUDIT_LOG ([database_name],transaction_id, [object_id], event_time,  [object_name], [statement] )
        
@@ -58,7 +49,7 @@ namespace YourOwnData.Pages
                     new ChatRequestSystemMessage(systemMessage),
                     new ChatRequestUserMessage(userPrompt)
                 },
-                    DeploymentName = openAIDeploymentName
+                    DeploymentName = GlobalValues.AzureAIDeployment
                 };
 
                 // Send request to Azure OpenAI model

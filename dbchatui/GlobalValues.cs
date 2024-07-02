@@ -4,6 +4,12 @@ using Microsoft.SemanticKernel;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using YourOwnData.Plugins;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+using Azure.Search.Documents;
+using Azure;
+using Elastic.Transport;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
+using Azure.AI.OpenAI;
 
 namespace YourOwnData
 {
@@ -18,12 +24,23 @@ namespace YourOwnData
         private static string? _azureAIAPIKey;
         private static string? _azureAIDeployment;
 
+        private static Uri? _azureSearchEndPoint;
+        private static AzureKeyCredential? _azureSearchCredential;
+        private static string? _azureSearchUserGuides;
+        private static string? _azureSearchHawkerMenu;
+
+        private static string? _connString;
+
         private static Kernel? _kernel;
         private static ChatHistory? _history;
         private static string? _systemMessage;
         private static string? _userMessage;
         private static IChatCompletionService? _chatCompletionService;
         private static OpenAIPromptExecutionSettings? _openAIPromptExecutionSettings;
+        private static SearchClient? _searchClient;
+        private static OpenAIClient? _openAIClient;
+
+        
 
         private static string AzureAIEndPoint
         {
@@ -48,7 +65,7 @@ namespace YourOwnData
                 return _azureAIAPIKey;
             }
         }
-        private static string AzureAIDeployment
+        public static string AzureAIDeployment
         {
             get
             {
@@ -57,6 +74,56 @@ namespace YourOwnData
                     _azureAIDeployment = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AZUREAI")["DEPLOYMENT"];
                 }
                 return _azureAIDeployment;
+            }
+        }
+
+        private static Uri AzureSearchEndPoint
+        {
+            get
+            {
+                if (_azureSearchEndPoint == null)
+                {
+                    string str = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AZURESEARCH")["ENDPOINT"];
+                    _azureSearchEndPoint = new Uri($"https://{str}.search.windows.net/");
+                }
+                return _azureSearchEndPoint;
+            }
+        }
+
+        private static AzureKeyCredential AzureSearchCredential
+        {
+            get
+            {
+                if (_azureSearchCredential == null)
+                {
+                    string apiKey = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AZURESEARCH")["APIKEY"];
+                    _azureSearchCredential = new AzureKeyCredential(apiKey);
+                }
+                return _azureSearchCredential;
+            }
+        }
+
+        private static string AzureSearchUserGuides
+        {
+            get
+            {
+                if (_azureSearchUserGuides == null)
+                {
+                    _azureSearchUserGuides = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AZURESEARCH")["USERGUIDES"];
+                }
+                return _azureSearchUserGuides;
+            }
+        }
+
+        private static string AzureSearchHawkerMenu
+        {
+            get
+            {
+                if (_azureSearchHawkerMenu == null)
+                {
+                    _azureSearchHawkerMenu = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AZURESEARCH")["HAWKERMENU"];
+                }
+                return _azureSearchHawkerMenu;
             }
         }
 
@@ -88,6 +155,33 @@ namespace YourOwnData
                         _kernel = builder.Build();
                 }
                 return _kernel;
+            }
+        }
+        public static SearchClient searchClient(string datasource)
+        {
+            string s = datasource.Trim().ToLower();
+            switch (s)
+            {
+                case "userguides":
+                    return new SearchClient(AzureSearchEndPoint, AzureSearchUserGuides, AzureSearchCredential);
+
+                case "hawkermenu":
+                    return new SearchClient(AzureSearchEndPoint, AzureSearchHawkerMenu, AzureSearchCredential);
+
+                 default:
+                    return new SearchClient(AzureSearchEndPoint, AzureSearchUserGuides, AzureSearchCredential);
+            }
+        }
+
+        public static OpenAIClient openAIClient
+        {
+            get
+            {
+                if (_openAIClient == null)
+                {
+                    _openAIClient = new(new Uri(AzureAIEndPoint), new AzureKeyCredential(AzureAIAPIKey));
+                }
+                return _openAIClient;
             }
         }
 
@@ -144,6 +238,58 @@ namespace YourOwnData
             set { _userMessage = value; }
         }
 
+        public enum EDatabase
+        {
+            MWDOpenAIDB,
+            SVStagingITE,
+            HAWKERDB
+        }
+
+        public static string ConnectionString(EDatabase db)
+        {
+            string s = string.Empty;
+
+            switch (db)
+            {
+                case EDatabase.MWDOpenAIDB:
+                    s = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("CONNECTIONSTRING")["mwd-openai-db"];
+                    break;
+
+                case EDatabase.SVStagingITE:
+                    s = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("CONNECTIONSTRING")["svstaging-ite"];
+                    break;
+
+                case EDatabase.HAWKERDB:
+                    s = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("CONNECTIONSTRING")["mwp-105-hawker"];
+                    break;
+
+                default:
+                    break;
+            }
+
+            return s;
+        }
+
+
+        public static SMTP GetSMTP()
+        {
+            SMTP smtp = new SMTP();
+            smtp.HostName = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("SMTP")["HOSTNAME"];
+            smtp.UserName = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("SMTP")["USERNAME"];
+            smtp.Password = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("SMTP")["PASSWORD"];
+            smtp.EmailFrom = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("SMTP")["EMAILFROM"];
+            return smtp;
+        }
+
     }
+
+}
+
+public class SMTP
+{
+    public string HostName { get; set; }
+    public string UserName { get; set; }
+    public string Password { get; set; }
+    public string EmailFrom { get; set; }
 
 }

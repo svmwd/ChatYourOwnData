@@ -19,21 +19,23 @@ namespace YourOwnData.Pages
     {
         [BindProperty]
         public string UserPrompt { get; set; } = string.Empty;
-        public string? Response { get; set; }
+        public string Response { get; set; }
         public string? Error { get; set; }
 
         public void OnGet() 
         {
         }
 
-        public void OnPost()
+        public async Task OnPost()
         {
-            RunQuery(UserPrompt);
+            await RunQuery(UserPrompt);
         }
 
 
-        public async void RunQuery(string userPrompt)
+        public async Task RunQuery(string userPrompt)
         {
+            Kernel kernel = GlobalValues.kernel;
+
             GlobalValues.UserMessage = userPrompt;
             GlobalValues.history.AddUserMessage(userPrompt);
 
@@ -60,13 +62,14 @@ namespace YourOwnData.Pages
 
             try
             {
-                string goal = "to provide food suggestion and email order";
+                //string goal = "to provide food suggestion and email order";
                 var planner = new HandlebarsPlanner(plannerOptions);
-                var plan = await planner.CreatePlanAsync(GlobalValues.kernel, goal);
-                var planResult = await plan.InvokeAsync(GlobalValues.kernel);
+                var plan = await planner.CreatePlanAsync(kernel, userPrompt);
 
-                Response = "Step by Step Plan: " + plan;
-                Response += "Result: " + planResult ?? string.Empty;
+                Response = await plan.InvokeAsync(kernel);
+
+                //Response = "Step by Step Plan: " + plan;
+                //Response += "Result: " + planResult ?? string.Empty;
                 GlobalValues.history.AddAssistantMessage(Response);
             }
             catch (Microsoft.SemanticKernel.Planning.PlanCreationException e)

@@ -40,7 +40,7 @@ namespace YourOwnData.Pages
         private static SqlConnection connString()
         {
             /*azureDB currently not available*/
-            string strConn = "Server=mwd-openai-server.database.windows.net; User Id=mwdadmin;Password=st@rvisi0n;Database=mwd-openai-db;Connection Timeout=300;";
+            string strConn = GlobalValues.ConnectionString(GlobalValues.EDatabase.MWDOpenAIDB);
             return new SqlConnection(strConn);
         }
 

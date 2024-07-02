@@ -12,15 +12,16 @@ namespace YourOwnData.Services
             bool success = true;
             try
             {
-                using (SmtpClient smtpClient = new SmtpClient("smtp.mecwise.com"))
+                SMTP smtp = GlobalValues.GetSMTP();
+                using (SmtpClient smtpClient = new SmtpClient(smtp.HostName))
                 {
                     smtpClient.Port = 25;
-                    smtpClient.Credentials = new NetworkCredential("mwpdemo@mecwise.com", "St@rvisi0n123");
+                    smtpClient.Credentials = new NetworkCredential(smtp.UserName, smtp.Password);
                     smtpClient.EnableSsl = false;
 
                     using (MailMessage mailMessage = new MailMessage())
                     {
-                        mailMessage.From = new MailAddress("mwdwebuat@gmail.com");
+                        mailMessage.From = new MailAddress(smtp.EmailFrom);
                         mailMessage.Subject = "Test Email using Semantic Kernel";
                         mailMessage.Body = emailBody;
                         mailMessage.To.Add(emailTo);

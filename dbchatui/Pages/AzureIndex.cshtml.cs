@@ -28,17 +28,8 @@ namespace YourOwnData.Pages
 
         public void RunQuery(string userPrompt)
         {
-            string serviceName = "mecwise-azure-openai-search-basic";
-            string apiKey = "aG3dbtK1busxxJfF7IMu5oiJIAvCvsUk4bhRY6DfJDAzSeDSb4Wg";
-            string indexName = "svstaging-hawker-mf-stk-ai-chat-index";
-
-            // Create a SearchIndexClient to send create/delete index commands
-            Uri serviceEndpoint = new Uri($"https://{serviceName}.search.windows.net/");
-            AzureKeyCredential credential = new AzureKeyCredential(apiKey);
-            SearchIndexClient adminClient = new SearchIndexClient(serviceEndpoint, credential);
-
             // Create a SearchClient to load and query documents
-            SearchClient srchclient = new SearchClient(serviceEndpoint, indexName, credential);
+            SearchClient srchclient = GlobalValues.searchClient("hawkermenu");
 
             SearchOptions options;
             SearchResults<MF_STK_PRICE> response;

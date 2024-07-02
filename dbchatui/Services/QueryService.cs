@@ -14,17 +14,8 @@ namespace YourOwnData.Services
         {
             string sQuery = string.Empty;
 
-            string openAIEndpoint = "https://mwd-azure-openai-westus.openai.azure.com/";
-            string openAIKey = "3e0982201b4f44819ab2003f3d179d32";
+            OpenAIClient client = GlobalValues.openAIClient;
 
-            // Configure OpenAI client GPT-4o
-            string openAIDeploymentName = "mwd-azure-openai-gpt-4o";
-
-            // Configure OpenAI client GPT-35
-            //string openAIDeploymentName = "mwd-kernel-plugin";
-
-            OpenAIClient client = new(new Uri(openAIEndpoint), new AzureKeyCredential(openAIKey));
-           
             // Set up the AI chat query/completion
             ChatCompletionsOptions chatCompletionsOptions = new ChatCompletionsOptions()
             {
@@ -32,7 +23,7 @@ namespace YourOwnData.Services
                     new ChatRequestSystemMessage(systemMessage),
                     new ChatRequestUserMessage(userPrompt)
                 },
-                DeploymentName = openAIDeploymentName
+                DeploymentName = GlobalValues.AzureAIDeployment
             };
 
 
