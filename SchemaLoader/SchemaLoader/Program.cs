@@ -9,8 +9,8 @@ Console.WriteLine("Extracting schema....");
 
 List<KeyValuePair<string, string>> rows = new();
 List<TableSchema> dbSchema = new();
-//const string SQL_CONNECTION_STRING = "Server=SVSG-MWD-F1\\SQL2022;Initial Catalog=MecWiseTest;Persist Security Info=False;User ID=sa;Password=p@ssw0rd;TrustServerCertificate=True;Connection Timeout=300;";
-const string SQL_CONNECTION_STRING = "Server=SVSG-MWD-F1\\SQL2016;Initial Catalog=MecWiseMWDV67_Hawker;Persist Security Info=False;User ID=sa;Password=p@ssw0rd;TrustServerCertificate=True;Connection Timeout=300;";
+
+const string SQL_CONNECTION_STRING = "YOUR CONNECTION STRING";
 
 using (SqlConnection connection = new SqlConnection(SQL_CONNECTION_STRING))
 {
