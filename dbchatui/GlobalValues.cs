@@ -15,11 +15,6 @@ namespace YourOwnData
 {
     public class GlobalValues
     {
-        /*datasource*/
-        private const string searchName = "mwd-azure-ai-search";
-        private const string primaryKey = "H45RR4SK9U64ELTjtjYOZXmtos46jDRAPmwxJeMyRHAzSeCCUsPK";
-        private const string indexName = "azuresql-index01";
-
         private static string? _azureAIEndPoint;
         private static string? _azureAIAPIKey;
         private static string? _azureAIDeployment;
