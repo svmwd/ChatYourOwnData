@@ -8,9 +8,9 @@ namespace YourOwnData.Plugins
 
     public class UserGuidePlugin
     {
-        private string DataSourceEndpoint = "https://mecwise-azure-openai-search-basic.search.windows.net";
-        private string DataSourceApiKey = "aG3dbtK1busxxJfF7IMu5oiJIAvCvsUk4bhRY6DfJDAzSeDSb4Wg";
-        private string DataSourceIndex = "mecwise-azure-openai-chatbot-search-basic-index02";
+        private string DataSourceEndpoint = "";
+        private string DataSourceApiKey = "";
+        private string DataSourceIndex = "";
 
         [KernelFunction]
         [Description("Provide information about mecwise application to a recipient based on userguides uploaded in this datasource")]
